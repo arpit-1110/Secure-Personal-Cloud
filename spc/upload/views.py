@@ -4,5 +4,5 @@ from .models import File
 from django.contrib.auth.models import User
 
 def file_list(request):
-    files = File.objects.filter(author=me)
+    files = File.objects()
     return render(request, 'upload/file_list.html', {'files': files})
