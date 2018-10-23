@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from upload.models import Document
 from django.contrib.auth.models import User
@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login
 
 from django.core.files.storage import FileSystemStorage
+from upload.forms import DocumentForm
 
 # from uploads.core.models import Document
 # from uploads.core.forms import DocumentForm
@@ -13,9 +14,9 @@ from django.core.files.storage import FileSystemStorage
 
 
 def file_list(request):
-    # files = Document.objects.all()
+    files = Document.objects.all()
     # return render(request, 'upload/file_list.html', {'files': files})
-    return render(request, 'upload/file_list.html')
+    return render(request, 'upload/file_list.html',{'files': files})
 
 # def uploading(request):
 # 	des = request.POST['description']
@@ -38,15 +39,17 @@ def file_list(request):
 
 
 def uploading(request):
-    if request.method == 'POST' and request.FILES['myfile']:
-        myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-        return render(request, 'upload/upload_form.html', {
-            'uploaded_file_url': uploaded_file_url
-        })
-    return render(request, 'upload/upload_form.html')
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = DocumentForm()
+    return render(request, 'upload/upload_form.html', {
+        'form': form
+    })
+
 
 
 def my_view(request):
