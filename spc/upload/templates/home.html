@@ -7,8 +7,8 @@
 {% if user.is_authenticated %}
   Hi {{ user.username }}!
   <p><a href="{% url 'logout' %}">logout</a></p>
-  <p><a href="admin/">upload</a></p>
-  <p><a href="view/">View</p>
+  <p><a href="upload/upload/">upload</a></p>
+  <p><a href="upload/view/">View</p>
   <!-- <p><a href='' -->
 {% else %}
   <p>You are not logged in</p>

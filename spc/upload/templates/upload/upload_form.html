@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Form</title>
+</head>
+<body>
+    <form method="POST" action = "">
+        {% csrf_token %}
+        <p>
+            <label>Description</label>
+            <input type="text" name="description">
+        </p>
+        <p>
+            <label>Document</label>
+            <input type="file" name="document">
+        </p>
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>
