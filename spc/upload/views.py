@@ -4,7 +4,7 @@ from upload.models import Document
 from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate,login
-
+from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 from upload.forms import DocumentForm
 
@@ -51,7 +51,7 @@ def uploading(request):
     })
 
 
-
+@csrf_exempt
 def my_view(request):
     username = request.POST['username']
     password = request.POST['password']
