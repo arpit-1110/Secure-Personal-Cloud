@@ -6,15 +6,19 @@
 {% block content %}
 {% if user.is_authenticated %}
   Hi {{ user.username }}!
-  <p><a href="{% url 'logout' %}">logout</a></p>
-  <p><a href="upload/upload/">upload</a></p>
-  <p><a href="upload/view/">View</p>
+  <body style="background-color:powderblue;">
+  <p style="font-family: courier;"><a href="{% url 'logout' %}">Logout</a></p>
+  <p style="font-family: courier;"><a href="upload/upload/">Upload</a></p>
+  <p style="font-family: courier;"><a href="upload/view/">View</a></p>
   <!-- <p><a href='' -->
+  </body>
 {% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">login</a>
+<body style="background-color:powderblue;">
+  <p style="font-family: courier;">You are not logged in</p>
+  <a href="{% url 'login' %}" style="font-family: courier;">Login</a>
   <div>
-  <a href="accounts/signup/">Sign Up</a>
+  <a href="accounts/signup/" style="font-family: courier;">Sign Up</a>
 </div>
+</body>
 {% endif %}
 {% endblock %}
