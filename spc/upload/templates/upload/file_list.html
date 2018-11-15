@@ -10,7 +10,7 @@
   <ul>
     {% for obj in files %}
       <li>
-        <a href="{{ obj.document.url }}">{{ obj.document.name }}</a>
+        <a href="{{ obj.document.url }}">{{ obj.location }}</a>
         <small>(Uploaded at: {{ obj.uploaded_at }})</small>
       </li>
     {% endfor %}
