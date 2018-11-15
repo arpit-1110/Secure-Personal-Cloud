@@ -41,7 +41,7 @@ def decrypt_file(key, in_filename, out_filename=None, chunksize=24*1024):
 	    iv = infile.read(16)
 	    decryptor = AES.new(key, AES.MODE_CBC, iv)
 
-	    with open(out_filename, 'wb') as outfile:
+	    with open(out_filename, 'w') as outfile:
 	        while True:
 	            chunk = infile.read(chunksize)
 	            if len(chunk) == 0:
