@@ -21,7 +21,8 @@ def mylogin(a,b):
 	}
 
 	r = client.post(url, data=login_data)
-	if (r.status_code != 200):
+	if (r.content[100] != 115):
+		print("Invalid Login")
 		return False
 	else :
 		file_name = "login_info.p"
