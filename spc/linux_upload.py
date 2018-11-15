@@ -25,11 +25,7 @@ def upload():
 		'csrfmiddlewaretoken':csrftoken
 	}
 	
-	q=client1.post(url,data=login_data)
-
-	if (q.content[100] != 115):
-		print("Invalid Request")
-		return False
+	client1.post(url,data=login_data)
 	csrftoken = client1.cookies['csrftoken']
 
 	doc={
@@ -38,6 +34,7 @@ def upload():
 	}
 
 	lols= {
+        '
 		'description' : desc,
 		'location' : add,
 		'submit': 'Upload',

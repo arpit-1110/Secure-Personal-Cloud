@@ -14,7 +14,7 @@ from upload.forms import DocumentForm
 
 
 def file_list(request):
-    files = Document.objects.all()
+    files = Document.objects.filter(author = request.user)
     # return render(request, 'upload/file_list.html', {'files': files})
     return render(request, 'upload/file_list.html',{'files': files})
 
@@ -40,10 +40,17 @@ def file_list(request):
 
 def uploading(request):
     if request.method == 'POST':
+        # print(request.POST['author'])
+        # print(request.user.id)
         form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+        if int(request.POST['author']) == int(request.user.id):
+            # print("yasss")
+            if form.is_valid():
+                form.save()
+                return redirect('home')
+        else:
+            # print("nooo")
+            return render(request,'upload/error_page.html')
     else:
         form = DocumentForm()
     return render(request, 'upload/upload_form.html', {
