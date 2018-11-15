@@ -5,24 +5,27 @@ import pickle
 
 
 user = input("Username : ")
-passwd = getpass.getpass("Password : ")    
+passwd = getpass.getpass("Password : ") 
+checkpass = getpass.getpass ("Re-enter Password : ")   
 
 
-def mylogin(a,b):
+def mylogin(a,b,c):
 	client = requests.session()
-	url="http://127.0.0.1:8000/accounts/login/"
+	url="http://127.0.0.1:8000/accounts/signup/"
 	client.get(url)
 	csrftoken = client.cookies['csrftoken']
 	login_data = {
 		'username': a,
-		'password': b,
-		'submit': 'login',
+		'password1': b,
+		'password2' : c,
+		'submit': 'Sign up',
 		'csrfmiddlewaretoken':csrftoken
 	}
 
 	r = client.post(url, data=login_data)
-	if (r.content[100] != 115):
-		print("Invalid Login")
+	if (r.content[100] != 105):
+		# print(r.content[100])
+		print("Invalid Signup")
 		return False
 	else :
 		file_name = "login_info.p"
@@ -35,31 +38,4 @@ def mylogin(a,b):
 
 
 
-mylogin(user,passwd)	
-
-# task = input("Task : ")	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+mylogin(user,passwd, checkpass)	

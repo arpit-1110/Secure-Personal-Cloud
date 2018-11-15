@@ -7,6 +7,7 @@ class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = ('author','description', 'document','location')
+        # fields = ('description', 'document','location')
 
 
 

@@ -6,7 +6,7 @@ from Crypto.Cipher import AES
 import hashlib
 import getpass
 # password = 'bitch'
-password = getpass.getpass()
+# password = getpass.getpass()
 
 def encrypt_file(key, in_filename, out_filename=None, chunksize=64*1024) :
 	if not out_filename:
@@ -52,17 +52,17 @@ def decrypt_file(key, in_filename, out_filename=None, chunksize=24*1024):
 
 # decrypt_file(key[:16], 'temp.txt.enc', 'myfile')
 
-password = password.encode('utf-8')
-key = hashlib.sha256(password).hexdigest()
-# print(key)
-# encrypt_file(key[:16], 'temp.txt')
+# password = password.encode('utf-8')
+# key = hashlib.sha256(password).hexdigest()
+# # print(key)
+# # encrypt_file(key[:16], 'temp.txt')
 
-if sys.argv[1] == "encrypt" :
-	encrypt_file(key[:16], sys.argv[2])
+# if sys.argv[1] == "encrypt" :
+# 	encrypt_file(key[:16], sys.argv[2])
 
-elif sys.argv[1] == "decrypt" :
-	enc_file = sys.argv[2]
-	decrypt_file(key[:16], enc_file, enc_file[:-4])
+# elif sys.argv[1] == "decrypt" :
+# 	enc_file = sys.argv[2]
+# 	decrypt_file(key[:16], enc_file, enc_file[:-4])
 
-else :
-	print("Invalid option")
+# else :
+# 	print("Invalid option")

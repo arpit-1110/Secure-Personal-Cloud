@@ -8,6 +8,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 from upload.forms import DocumentForm
 
+import os
+import random
+import struct
+import sys
+from Crypto.Cipher import AES
+import hashlib
+import getpass
+# password = 'bitch'
+password = getpass.getpass()
+
 # from uploads.core.models import Document
 # from uploads.core.forms import DocumentForm
 
@@ -15,6 +25,7 @@ from upload.forms import DocumentForm
 
 def file_list(request):
     files = Document.objects.filter(author = request.user)
+    # files = Document.objects.all()
     # return render(request, 'upload/file_list.html', {'files': files})
     return render(request, 'upload/file_list.html',{'files': files})
 
@@ -44,7 +55,7 @@ def uploading(request):
         # print(request.user.id)
         form = DocumentForm(request.POST, request.FILES)
         if int(request.POST['author']) == int(request.user.id):
-            # print("yasss")
+            print("yasss")
             if form.is_valid():
                 form.save()
                 return redirect('home')
