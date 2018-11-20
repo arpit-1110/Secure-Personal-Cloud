@@ -6,15 +6,22 @@
 {% if user.is_authenticated %}
   
 
-  <p>Uploaded files:</p>
-  <ul>
-    {% for obj in files %}
-      <li>
-        <a href="{{ obj.document.url }}">{{ obj.location }}</a>
-        <small>(Uploaded at: {{ obj.uploaded_at }})</small>
-      </li>
-    {% endfor %}
-  </ul>
+      <ul>
+        {% for obj in files %}
+          <li>
+            <!-- <img src="{% url 'db_file_storage.get_file' %}?name={{ obj.name }}"> -->
+            <a href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'>
+        <i>{{obj.name}}</i>
+
+      </a>
+      <span>  Path: /</span><span>{{obj.parentfolder.name}}</span>
+      <a href='/upload/newfolder/{{obj.parentfolder.pk}}'>Go to folder</a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <p><a href="{% url 'home' %}">Return to home</a></p>
+
 
 
 {% else %}

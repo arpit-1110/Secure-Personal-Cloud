@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+	<p>Hellos</p>
+
+	<p>Folders:</p>
+	  <ul>
+	    {% for obj in childfolders %}
+	      <li>
+	        <a href="/upload/newfolder/{{obj.pk}}">{{ obj.name }}</a>
+	      </li>
+	    {% endfor %}
+	  </ul>
+
+	<p>Files:</p>
+		<ul>
+		    {% for obj in childfiles %}
+		      <li>
+		        <!-- <img src="{% url 'db_file_storage.get_file' %}?name={{ obj.name }}"> -->
+		        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'>
+	    	<i>{{obj.name}}</i>
+			</a>
+		      </li>
+		    {% endfor %}
+	  	</ul>
+
+	 <p>Create New Folder:</p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ folderform.as_p }}
+    <button type="submit" name = "foldersubmitbutton">Create Folder</button>
+  </form>
+
+
+  <p>Upload file:</p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ fileform.as_p }}
+    <button type="submit" name = "filesubmitbutton">Upload File</button>
+  </form>
+
+  <p><a href="{% url 'home' %}">Return to home</a></p>
+
+{% else %}
+	<p>You are not logged in</p>
+  	<a href="{% url 'login' %}">login</a>
+{% endif %}
+
+{% endblock %}
