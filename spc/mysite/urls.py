@@ -27,7 +27,8 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('upload/', include('upload.urls'), name='view'),
     # path('files/', include('db_file_storage.urls'))
-    url(r'^files/', include('db_file_storage.urls'))
+    url(r'^files/', include('db_file_storage.urls')),
+    path('api/v1/', include('api.urls')),
 ]
 
 # if settings.DEBUG:

@@ -13,6 +13,16 @@
 	    {% for obj in childfolders %}
 	      <li>
 	        <a href="/upload/newfolder/{{obj.pk}}">{{ obj.name }}</a>
+
+	        <form action="{% url 'delete_folder' obj.pk %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="album_id" value="{{ obj.pk }}" />
+            <button type="submit" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+            </form>
+
+
 	      </li>
 	    {% endfor %}
 	  </ul>
@@ -24,6 +34,16 @@
 		        <!-- <img src="{% url 'db_file_storage.get_file' %}?name={{ obj.name }}"> -->
 		        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'>
 	    	<i>{{obj.name}}</i>
+
+	    	<form action="{% url 'delete_file' obj.pk %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="album_id" value="{{ obj.pk }}" />
+            <button type="submit" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+            </form>
+
+
 			</a>
 		      </li>
 		    {% endfor %}

@@ -10,7 +10,7 @@ class FileInfo(models.Model):
     mimetype = models.CharField(max_length=50)
 
 class File(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,blank = True)
     file = models.FileField(upload_to='upload.FileInfo/bytes/filename/mimetype', blank=True, null=True)
     description = models.CharField(max_length=255, blank=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -35,9 +35,9 @@ class Folder(models.Model):
 	def __str__(self):
 		return self.name
 
-class Document(models.Model):
-	author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	description = models.CharField(max_length=255, blank=True)
-	document = models.FileField(upload_to='documents/')
-	uploaded_at = models.DateTimeField(auto_now_add=True)
-	location = models.CharField(max_length=1000,blank=True)
+# class Document(models.Model):
+# 	author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+# 	description = models.CharField(max_length=255, blank=True)
+# 	document = models.FileField(upload_to='documents/')
+# 	uploaded_at = models.DateTimeField(auto_now_add=True)
+# 	location = models.CharField(max_length=1000,blank=True)

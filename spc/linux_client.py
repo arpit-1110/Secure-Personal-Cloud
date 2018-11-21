@@ -8,7 +8,7 @@ user = input("Username : ")
 passwd = getpass.getpass("Password : ")    
 
 
-def mylogin(a,b):
+
 	client = requests.session()
 	url="http://127.0.0.1:8000/accounts/login/"
 	client.get(url)

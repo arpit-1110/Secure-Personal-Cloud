@@ -1,6 +1,8 @@
 from django import forms
+from django.urls import reverse_lazy
 
-from upload.models import File,Folder,Document
+from upload.models import File,Folder
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 # from upload.models import 
@@ -23,16 +25,16 @@ class FolderForm(forms.ModelForm):
 class SearchForm(forms.Form):
 	search = forms.CharField(label='search', max_length=1000)
 
-class FileDelete(DeleteView):
-    model = File #for what this view is for
-    success_url = reverse_lazy('home')
+# class FileDelete(DeleteView):
+#     model = File #for what this view is for
+#     success_url = reverse_lazy('home')
 
 
-class DocumentForm(forms.ModelForm):
-    class Meta:
-        model = Document
-        fields = ('author','description', 'document','location')
-        # fields = ('description', 'document','location')
+# class DocumentForm(forms.ModelForm):
+#     class Meta:
+#         model = Document
+#         fields = ('author','description', 'document','location')
+#         # fields = ('description', 'document','location')
 
 
 
