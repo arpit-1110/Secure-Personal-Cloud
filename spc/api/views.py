@@ -51,7 +51,7 @@ def uploadfile(request,parent_id):
 	    key = temp.pk
 	    return JsonResponse({'key':key},safe = False)
 	else:
-		print("goes here")
+		# print("goes here")
 		return JsonResponse({'error' : "error" },safe = False)
 
 

@@ -106,7 +106,7 @@ def fileupload(path,name,parent_id):
 	
 	url = "http://127.0.0.1:8000/api/v1/uploadfile/"+str(parent_id)+"/"
 	r = client.post(url,data = file_data, files=upfiles)
-	print(r)
+	# print(r)
 
 
 def createfolder(name,parent_id):
@@ -126,13 +126,13 @@ def createfolder(name,parent_id):
 def recur(path,parent_id):
 	for f in os.listdir(path):
 		# print(f)
-		print(f)
+		# print(f)
 		# print(os.path.isdir())
 		if os.path.isfile(path+"/"+f) == True:
-			print("goes here")
+			# print("goes here")
 			fileupload(path,f,parent_id)
 		elif os.path.isdir(path+"/"+f) == True:
-			print("goes here also")
+			# print("goes here also")
 			key = createfolder(f,parent_id)
 			path2 = path + "/" + f
 			recur(path2,key)
@@ -144,7 +144,31 @@ parent_id = r.json()["root"]
 
 path = input("Enter the path/name of the folder of file: ")
 
-recur(path,parent_id)
+name = path.split("/")[-1]
+
+if os.path.isdir(path) == True:
+	new_parent_id = createfolder(name,parent_id) #extract name from path
+	recur(path,new_parent_id)
+else:
+	file_data = {
+	'name' : name,
+	'description' : "first recursive folder through linux",
+	}
+
+	file = open(path,'rb')
+
+	# print(file)
+
+	upfiles = {
+		'file' : file,
+	}
+	
+	
+	url = "http://127.0.0.1:8000/api/v1/uploadfile/"+str(parent_id)+"/"
+	r = client.post(url,data = file_data, files=upfiles)
+	# print(r)
+
+# recur(path,parent_id)
 
 
 
