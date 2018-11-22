@@ -41,10 +41,11 @@
             <a class ="navbar-brand" href=http://127.0.0.1:8000>Home</a>
         </div>
 
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav navbar-right">
 
-               
+               <li ><a href= '/upload/newfolder/{{ key }}/'>Back</a></li>
                 <li ><a href= http://127.0.0.1:8000/accounts/logout>Logout</a></li>
+                <li><a></a></li>
                 
                
                 
@@ -72,7 +73,8 @@
         <img src="{% static '/images/folder.png' %}"  width=50px height=50px></a>
         <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
         </figcaption>
-        <a href="/upload/folderdelete/{{obj.pk}}/">Delete</a>
+        <a href="/upload/folderdelete/{{obj.pk}}/"><figure>
+        <img src="{% static '/images/delete.png' %}"  width=20px height=20px></figure></a>
       </figure>
     </a>
 </div>
@@ -94,11 +96,16 @@
 
     <a href="/upload/fileview/{{obj.pk}}/">
       <figure>
-        <img src="{% static '/images/file.png' %}"  width=50px height=50px></a>
+        <img src="{% static '/images/file.png' %}"  width=50px height=50px>
         <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
         </figcaption>
-        <li><a href="/upload/filedownload/{{obj.pk}}/">Download</a></li>
-        <li><a href="/upload/filedelete/{{obj.pk}}/">Delete</a></li>
+        <div>
+        <a href="/upload/filedownload/{{obj.pk}}/">
+        	<figure>
+
+        <img src="{% static '/images/download.png' %}"  width=20px height=20px></figure></a>
+        <a href="/upload/filedelete/{{obj.pk}}/"><figure>
+        <img src="{% static '/images/delete.png' %}"  width=20px height=20px></figure></a></div>
       
       </figure>
     </a>
