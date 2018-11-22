@@ -12,7 +12,15 @@ from django import forms
 class FileForm(forms.ModelForm):
     class Meta:
         model = File
-        exclude = ['author','parentfolder']
+        exclude = ['author','parentfolder','name','md5sum']
+        widgets = {
+            'picture': DBClearableFileInput
+        }
+
+class FileFormAPI(forms.ModelForm):
+    class Meta:
+        model = File
+        exclude = ['author','parentfolder','name']
         widgets = {
             'picture': DBClearableFileInput
         }

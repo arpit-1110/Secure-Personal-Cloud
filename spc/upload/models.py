@@ -12,7 +12,7 @@ class FileInfo(models.Model):
 class File(models.Model):
     name = models.CharField(max_length=100,blank = True)
     file = models.FileField(upload_to='upload.FileInfo/bytes/filename/mimetype', blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True)
+    md5sum = models.CharField(max_length=255, blank=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     parentfolder = models.ForeignKey('Folder',on_delete=models.CASCADE,blank=True,null=True)
 
@@ -21,8 +21,9 @@ class File(models.Model):
         super(File, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        delete_file(self, 'file')
         super(File, self).delete(*args, **kwargs)
+        delete_file(self, 'file')
+        
 
     def __str__(self):
     	return self.name

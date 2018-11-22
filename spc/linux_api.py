@@ -3,6 +3,7 @@ import requests
 import getpass
 import pickle
 import os
+import hashlib
 
 file_name = "login_info.p"
 file = open(file_name,'rb')
@@ -23,17 +24,24 @@ r = client.post(url, data=login_data)
 
 dicti = r.json()
 
-try:
-	file_name = "login_info.p"
-	file = open(file_name,'wb+')
-	d = {'Username' : user, 'Password' : passwd, 'key' : dicti["key"]}
-	pickle.dump(d,file)
-	file.close()
-except:
-	d = dict()
-	pickle.dump(d,file)
-	file.close()
-	print("Invalid Login")
+def md5(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, 'rb') as file2:
+	    for chunk in iter(lambda: file2.read(4096), b""):
+	        hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
+# try:
+# 	file_name = "login_info.p"
+# 	file = open(file_name,'wb+')
+# 	d = {'Username' : user, 'Password' : passwd, 'key' : dicti["key"]}
+# 	pickle.dump(d,file)
+# 	file.close()
+# except:
+# 	d = dict()
+# 	pickle.dump(d,file)
+# 	file.close()
+# 	print("Invalid Login")
 
 
 
@@ -90,12 +98,20 @@ except:
 # else:
 
 def fileupload(path,name,parent_id):
+	file = open(path+"/"+name, 'rb')
+
+
 	file_data = {
 	'name' : name,
-	'description' : "first recursive folder through linux",
+	'md5sum' : md5(path+"/"+name),
 	}
 
-	file = open(path+"/"+name,'rb')
+	# file2 = file
+
+	# print(md5(path+"/"+name))
+
+
+	# file = open(path+l"/"+name,'rb')
 
 	# print(file)
 
@@ -106,7 +122,7 @@ def fileupload(path,name,parent_id):
 	
 	url = "http://127.0.0.1:8000/api/v1/uploadfile/"+str(parent_id)+"/"
 	r = client.post(url,data = file_data, files=upfiles)
-	# print(r)
+	print(r.json())
 
 
 def createfolder(name,parent_id):
@@ -150,12 +166,14 @@ if os.path.isdir(path) == True:
 	new_parent_id = createfolder(name,parent_id) #extract name from path
 	recur(path,new_parent_id)
 else:
+	file = open(path,'rb')
+
 	file_data = {
 	'name' : name,
-	'description' : "first recursive folder through linux",
+	'description' : "jhkj",
 	}
 
-	file = open(path,'rb')
+	
 
 	# print(file)
 
