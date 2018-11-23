@@ -38,7 +38,7 @@
   
 </style> 
 </head>
- <body style="background-color:#b2ff59;">
+ 
   <script type="text/javascript">
     function de(urlToSend, name, option) {
     // var aesjs = require('aes-js');
@@ -101,6 +101,9 @@
 }
   </script>
 
+<body style="background-color: #FFFAFA;">
+  
+
 <nav class="navbar navbar-inverse">
     <div class="containor-fluid">
         <div class="navbar-header">
@@ -112,10 +115,11 @@
             <a class ="navbar-brand" href="/">Home</a>
         </div>
 
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav navbar-right">
 
-               
-                <li ><a href= "/accounts/logout">Logout</a></li>
+               <li ><a href= '/upload/newfolder/{{ key }}/'>Back</a></li>
+                <li ><a href= '/accounts/logout'>Logout</a></li>
+                <li><a></a></li>
                 
                
                 
@@ -131,28 +135,9 @@
    </nav>  
 
 
-	
-	
-  <section>
-    
-   
-      {% for obj in childfolders %}
-      <div class="image-div">
 
-    <a href="/upload/newfolder/{{obj.pk}}">
-      <figure>
-        <img src="{% static '/images/folder.png' %}"  width=50px height=50px></a>
-        <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
-        </figcaption>
-        <a href="/upload/folderdelete/{{obj.pk}}/"><figure>
-        <img src="{% static '/images/delete.png' %}"  width=20px height=20px></figure></a>
-      </figure>
-    </a>
-</div>
-        
-        
-      {% endfor %}
-              </section>
+	
+	
 
   
 
