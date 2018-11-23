@@ -40,7 +40,7 @@
 </head>
  <body style="background-color:#b2ff59;">
   <script type="text/javascript">
-    function de(urlToSend, name) {
+    function de(urlToSend, name, option) {
     // var aesjs = require('aes-js');
      var req = new XMLHttpRequest();
      req.open("GET", urlToSend, true);
@@ -69,12 +69,26 @@
          finaltext = aesCbc.decrypt(filetxt.slice(16));
          // alert(aesjs.utils.hex.fromBytes(finaltext)) ;
          // alert(finaltext) ;
-         saveByteArray(name, finaltext) ;
+         if (option == 1) {
+          saveByteArray(name, finaltext) ;
+        }
+        else
+        {
+          viewByteArray(name, finaltext) ;
+        }
      };
 
      req.send();
      
 
+ }
+
+ function viewByteArray(name, byte) {
+  var blob = new Blob([byte], {type: name.slice(-3)});
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    // link.download = fileName;
+    window.open(link,'_blank');
  }
 
  function saveByteArray(reportName, byte) {
@@ -95,13 +109,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class ="navbar-brand" href=http://127.0.0.1:8000>Home</a>
+            <a class ="navbar-brand" href="/">Home</a>
         </div>
 
             <ul class="nav navbar-nav">
 
                
-                <li ><a href= http://127.0.0.1:8000/accounts/logout>Logout</a></li>
+                <li ><a href= "/accounts/logout">Logout</a></li>
                 
                
                 
@@ -148,12 +162,12 @@
 
         <div class="image-div">
 
-    <a href="/upload/fileview/{{obj.pk}}/">
+    <a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}', 2)">
       <figure>
         <img src="{% static '/images/file.png' %}"  width=50px height=50px></a>
         <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
         </figcaption>
-        <li><a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}')" href = '#'>Download</a></li>
+        <li><a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}', 1)" href = '#'>Download</a></li>
         <li><a href="/upload/filedelete/{{obj.pk}}/">Delete</a></li>
       
       </figure>
