@@ -132,67 +132,89 @@
 
 
 	
-	<section>
-		
-	 
-	    {% for obj in childfolders %}
-	    <div class="image-div">
+	
+  <section>
+    
+   
+      {% for obj in childfolders %}
+      <div class="image-div">
 
     <a href="/upload/newfolder/{{obj.pk}}">
       <figure>
         <img src="{% static '/images/folder.png' %}"  width=50px height=50px></a>
         <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
         </figcaption>
-        <a href="/upload/folderdelete/{{obj.pk}}/">Delete</a>
+        <a href="/upload/folderdelete/{{obj.pk}}/"><figure>
+        <img src="{% static '/images/delete.png' %}"  width=20px height=20px></figure></a>
       </figure>
     </a>
 </div>
-	      
-	      </section>
-	      
-	    {% endfor %}
-	
+        
+        
+      {% endfor %}
+              </section>
+
+  
 
 
 
 
 
-		<section>
-		    {% for obj in childfiles %}
+    <section>
+        {% for obj in childfiles %}
 
         <div class="image-div">
 
-    <a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}', 2)">
+    <a href="/upload/fileview/{{obj.pk}}/">
       <figure>
-        <img src="{% static '/images/file.png' %}"  width=50px height=50px></a>
+        <img src="{% static '/images/file.png' %}"  width=50px height=50px>
         <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
         </figcaption>
-        <li><a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}', 1)" href = '#'>Download</a></li>
-        <li><a href="/upload/filedelete/{{obj.pk}}/">Delete</a></li>
+        <div>
+        <a href="/upload/filedownload/{{obj.pk}}/">
+          <figure>
+
+        <img src="{% static '/images/download.png' %}"  width=20px height=20px></figure></a>
+        <a href="/upload/filedelete/{{obj.pk}}/"><figure>
+        <img src="{% static '/images/delete.png' %}"  width=20px height=20px></figure></a></div>
       
       </figure>
     </a>
 </div>
 
-		      
-		        <!-- <img src="{% url 'db_file_storage.get_file' %}?name={{ obj.name }}"> -->
+          
+            <!-- <img src="{% url 'db_file_storage.get_file' %}?name={{ obj.name }}"> -->
             <!-- '/upload/fileview/{{obj.pk}}/'
             '/upload/filedownload/{{obj.pk}}/'
             '/upload/folderdelete/{{obj.pk}}/'
             '/upload/filedelete/{{obj.pk}}/'
  -->
-		       <!--  <a class="list-group-item list-group-item-info" href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'>
-	    	<i>{{obj.name}}</i></a>
+           <!--  <a class="list-group-item list-group-item-info" href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'>
+        <i>{{obj.name}}</i></a>
 
-	    	<a class="list-group-item list-group-item-info" href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'> -->
+        <a class="list-group-item list-group-item-info" href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'> -->
 
 
-			
-		      
-		    {% endfor %}
+      
+          
+        {% endfor %}
 
       </section>
 
+      <div class="col-sm-offset-2 col-sm-8">
+  <p>Create New Folder:</p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ folderform.as_p }}
+    <button type="submit" name = "foldersubmitbutton">Create Folder</button>
+  </form>
+</div>
+
+      
+
+  
+  <div class="col-sm-offset-2 col-sm-8">
       <div class="col-sm-offset-2 col-sm-8">
   <p>Create New Folder:</p>
 
