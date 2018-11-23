@@ -7,6 +7,7 @@ import os
 import wget
 
 pass_file = "pass.p"
+home_dir = os.getcwd()
 
 def take_pass() :
 	passwd = getpass.getpass("Enter the new password: ")
@@ -24,43 +25,6 @@ def take_option() :
 
 
 # with open()
-def init() :
-	with open(pass_file, 'rb') as f :
-		data = pickle.load(f)
-	if data['md5'] == 'null' :
-		passwd = take_pass()
-		with open(pass_file, 'wb') as f :
-			pickle.dump({'md5': passwd, 'option' : data['option']}, f)
-		# return passwd
-	else :
-		if len(sys.argv) > 1 :
-			if 'c' in sys.argv[1] :
-				passwd = take_pass()
-				with open(pass_file, 'wb') as f :
-					pickle.dump({'md5': passwd, 'option' : data['option']}, f)
-			# return passwd 
-			# return data['md5']	
-	if data['option'] == 'null' :
-		op = take_option()
-		with open(pass_file, 'wb') as f :
-			pickle.dump({'md5': data['md5'], 'option' : op}, f)
-		# return passwd
-	else :
-		if len(sys.argv) > 1 :
-			if 'o' in sys.argv[1] :
-				op = take_option()
-				print(op)
-				with open(pass_file, 'wb') as f :
-					pickle.dump({'md5': data['md5'], 'option' : op}, f)
-			# return passwd 
-			
-			# return data['md5']	
-init()
-
-with open(pass_file, 'rb') as f :
-	data = pickle.load(f)
-file_passwd = data['md5']
-option = data['option']
 # print(option)
 # passwd = init()
 # option = str(input("Enter method of encryption (AES/DES3/Twofish): "))
@@ -125,12 +89,12 @@ def filedownload(path,name,infofile, passwd, option):
 		AESde(key[:32], filename)
 	if option == 'DES3' :
 		key = hashlib.sha256(passwd.encode('utf-8')).digest()
-		DES3de(key[:32], filename)
+		DES3de(key[:16], filename)
 	if option == 'Twofish' :
-		Twode(key, filename)
+		TWOde(key, filename)
 	try:
 		print('goes here')
-		os.remove(path+filename)
+		os.remove(filename)
 	except:
 		pass
 	try:
@@ -145,7 +109,7 @@ def filedownload(path,name,infofile, passwd, option):
 
 
 
-def recur(path,id, passwd, option):
+def recur_download(path,id, passwd, option):
 	url = "http://127.0.0.1:8000/api/v1/filedownload/"+str(id)+"/"
 	# print()
 	global stoc_for_all
@@ -223,7 +187,7 @@ def recur(path,id, passwd, option):
 				folderpath = path + "/" + name
 			# os.mkdir(folderpath)
 			# print(folderpath)
-			recur(folderpath,folderid, passwd, option)
+			recur_download(folderpath,folderid, passwd, option)
 		else:
 			name = info["name"]
 			folderid = info["id"]
@@ -233,11 +197,9 @@ def recur(path,id, passwd, option):
 				folderpath = path + "/" + name
 			os.mkdir(folderpath)
 			print(folderpath)
-			recur(folderpath,folderid, passwd, option)
+			recur_download(folderpath,folderid, passwd, option)
 
 
-
-recur(currpath,parent_id, file_passwd, option)
 
 #upload wala part ========================================================
 
@@ -264,7 +226,7 @@ def fileupload(path,name,parent_id, passwd, option):
 	
 	# print(file_data['name'])
 	url = "http://127.0.0.1:8000/api/v1/uploadfile/"+str(parent_id)+"/"
-	r = client.post(url,data = file_data, files=upfiles)
+	r = client.post(url,data = file_data, files=upfiles,timeout = 1000000)
 	os.remove(loc+'.enc')
 	return r.json()['status']
 
@@ -283,7 +245,7 @@ def createfolder(name,parent_id):
 
 
 
-def recur(path,parent_id, passwd, option):
+def recur_upload(path,parent_id, passwd, option):
 	for f in listdir_nohidden(path):
 		if os.path.isfile(path+"/"+f) == True:
 			# print("goes here")
@@ -294,7 +256,7 @@ def recur(path,parent_id, passwd, option):
 			# print("goes here also")
 			key = createfolder(f,parent_id)
 			path2 = path + "/" + f
-			recur(path2,key, passwd, option)
+			recur_upload(path2,key, passwd, option)
 
 url="http://127.0.0.1:8000/api/v1/rootfinder/"
 
@@ -305,10 +267,56 @@ parent_id = r.json()["root"]
 # name = path.split("/")[-1]
 
 # new_parent_id = createfolder(name,parent_id) #extract name from path
-recur(root_dir,parent_id, file_passwd, option)
+import shutil
 
+def init() :
+	global parent_id
+	global home_dir
+	global root_dir
+	print(root_dir)
+	os.chdir(home_dir)
+	with open(pass_file, 'rb') as f :
+		data = pickle.load(f)
+	if data['md5'] == 'null' :
+		passwd = take_pass()
+		with open(pass_file, 'wb') as f :
+			pickle.dump({'md5': passwd, 'option' : data['option']}, f)
+		# return passwd	
+	elif data['option'] == 'null' :
+		op = take_option()
+		with open(pass_file, 'wb') as f :
+			pickle.dump({'md5': data['md5'], 'option' : op}, f)
+		# return passwd
+	else :
+		if len(sys.argv) > 1 :
+			with open(pass_file, 'rb') as f :
+				data = pickle.load(f)
+				prev_passwd = data['md5']
+				prev_option = data['option']
+			if 'o' in sys.argv[1] :
+				op = take_option()
+				with open(pass_file, 'wb') as f :
+					pickle.dump({'md5': data['md5'], 'option' : op}, f)
+			if 'c' in sys.argv[1] :
+				passwd = take_pass()
+				with open(pass_file, 'wb') as f :
+					pickle.dump({'md5' : passwd, 'option' : data['option']}, f)
+			with open(pass_file, 'rb') as f :
+				data = pickle.load(f)
+				new_passwd = data['md5']
+				new_option = data['option']
+			# os.chdir(root_dir)
+			recur_upload(root_dir,parent_id, new_passwd, new_option)
 
+init()
 
-
-
+with open(pass_file, 'rb') as f :
+	data = pickle.load(f)
+file_passwd = data['md5']
+option = data['option']
+os.chdir(root_dir)
+import time
+recur_download(currpath,parent_id, file_passwd, option)
+time.sleep(0.01)
+recur_upload(root_dir,parent_id, file_passwd, option)
 
