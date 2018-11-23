@@ -20,7 +20,7 @@ class FileForm(forms.ModelForm):
 class FileFormAPI(forms.ModelForm):
     class Meta:
         model = File
-        exclude = ['author','parentfolder','name']
+        exclude = ['author','parentfolder']
         widgets = {
             'picture': DBClearableFileInput
         }
