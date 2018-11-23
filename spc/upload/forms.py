@@ -1,7 +1,7 @@
 from django import forms
 from django.urls import reverse_lazy
 
-from upload.models import File,Folder
+from upload.models import File,Folder,Time
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
@@ -32,6 +32,11 @@ class FolderForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
 	search = forms.CharField(label='search', max_length=1000)
+
+class TimeForm(forms.ModelForm):
+    class Meta:
+        model = Time
+        exclude = ['author']
 
 # class FileDelete(DeleteView):
 #     model = File #for what this view is for

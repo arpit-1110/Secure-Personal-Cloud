@@ -146,17 +146,40 @@
 
 
     <section>
+
+
+{% for obj in childfolders %}
+
+     <div class="image-div">   
+
+    <a href="/upload/newfolder/{{obj.pk}}/">
+      <figure>
+        <img src="{% static '/images/folder.png' %}"  width=50px height=50px>
+        <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
+        </figcaption>
+        
+        
+        <a href="/upload/folderdelete/{{obj.pk}}/"><figure>
+        <img src="{% static '/images/delete.png' %}"  width=20px height=20px></figure></a></div>
+      
+      </figure>
+    </a>
+
+</div>
+
+{% endfor %}
+      
         {% for obj in childfiles %}
 
         <div class="image-div">
 
-    <a href="/upload/fileview/{{obj.pk}}/">
+    <a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}', 2)">
       <figure>
         <img src="{% static '/images/file.png' %}"  width=50px height=50px>
         <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
         </figcaption>
         <div>
-        <a href="/upload/filedownload/{{obj.pk}}/">
+        <a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}', 1)" href="#">
           <figure>
 
         <img src="{% static '/images/download.png' %}"  width=20px height=20px></figure></a>
@@ -165,7 +188,12 @@
       
       </figure>
     </a>
-</div>
+  </div>
+    {% endfor %}
+
+
+
+
 
           
             <!-- <img src="{% url 'db_file_storage.get_file' %}?name={{ obj.name }}"> -->
@@ -182,7 +210,7 @@
 
       
           
-        {% endfor %}
+    
 
       </section>
 

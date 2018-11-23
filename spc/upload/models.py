@@ -36,6 +36,13 @@ class Folder(models.Model):
 	def __str__(self):
 		return self.name
 
+
+class Time(models.Model):
+    sync_allowed = models.CharField(max_length=255, blank=True)
+    timestamp = models.CharField(max_length=255, blank = True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE,blank=True,null=True)
+
+
 # class Document(models.Model):
 # 	author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 # 	description = models.CharField(max_length=255, blank=True)

@@ -50,12 +50,12 @@ def make_new_folder(request,form_id):
             if form.is_valid():
                 temp = form.save(commit = False)
                 temp.name = str(temp.file)
-                # print(temp.name)
+                print(temp.name)
                 temp.md5sum = md5(temp.file)
                 temp.author = request.user
                 temp.parentfolder = parent
                 lst = File.objects.filter(name = temp.name, parentfolder = parent, author = request.user)
-                # print(lst)
+                print(lst)
                 if len(lst) != 0:
                     return render(request,'upload/error_page.html')
                 else:
