@@ -6,6 +6,8 @@ from . import views
 urlpatterns = [
     # path('', views.ListTodo.as_view()),
     # path('<int:pk>/', views.DetailTodo.as_view()),
+    path('get_time_info/',views.get_time_info),
+    path('update_time_info/',views.update_time_info),
     url(r'^uploadfile/(?P<parent_id>[0-9]+)/$',views.uploadfile,name='uploadfile'),
     url(r'^createfolder/(?P<parent_id>[0-9]+)/$',views.createfolder,name='createfolder'),
     url(r'^filedownload/(?P<parent_id>[0-9]+)/$',views.filedownload,name='filedownload'),

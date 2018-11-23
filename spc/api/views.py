@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from upload.models import Folder,File
-from upload.forms import FolderForm,SearchForm,FileFormAPI
+from upload.models import Folder,File,Time
+from upload.forms import FolderForm,SearchForm,FileFormAPI,TimeForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+import time
 
 # Create your views here.
 
@@ -57,9 +58,9 @@ def uploadfile(request,parent_id):
 	    temp.parentfolder = parent
 	    # temp.save()
 	    key = temp.pk
-	    # print("goes here")
+	    print("goes here")
 	    lst = File.objects.filter(name = temp.name, parentfolder = parent, author = request.user)
-	    # print(lst)
+	    print(lst)
 	    if len(lst) != 0:
 	    	key = lst[0].pk
 	    	lst[0].delete()
@@ -91,6 +92,7 @@ def filedownload(request,parent_id):
 
 	return JsonResponse({'info' : infolist},safe = False)
 
+@csrf_exempt
 def folderlist(request,parent_id):
 	parent = Folder.objects.get(pk = parent_id)
 	folders = Folder.objects.filter(parentfolder = parent,author = request.user)
@@ -109,5 +111,33 @@ def folderlist(request,parent_id):
 		parent_id = temp[0].pk
 
 	return JsonResponse({'folderlist' : infolist,'parent' : parent_id},safe = False)
+
+@csrf_exempt
+def get_time_info(request):
+	times = Time.objects.filter(author = request.user)
+	if len(times) < 1:
+		print(time.time())
+		a = Time.objects.create(author = request.user, timestamp = time.time(), sync_allowed = "1")
+		a.save()
+		return JsonResponse({'allowed' : a.sync_allowed, 'time' : a.timestamp}, safe = False)
+	else:
+		return JsonResponse({'allowed' : times[0].sync_allowed, 'time' : times[0].timestamp} ,safe = False)
+
+@csrf_exempt
+def update_time_info(request):
+	times = Time.objects.filter(author = request.user)
+	times[0].delete()
+	form = TimeForm(request.POST)
+	if form.is_valid():
+		temp = form.save(commit = False)
+		temp.author = request.user
+		temp.save()
+		return JsonResponse({'success' : "success"}, safe = False)
+	else:
+		return JsonResponse({'error' : "error"},safe = False)
+
+
+	
+
 
 

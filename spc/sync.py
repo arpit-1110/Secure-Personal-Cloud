@@ -93,7 +93,7 @@ def filedownload(path,name,infofile, passwd, option):
 	if option == 'Twofish' :
 		TWOde(key, filename)
 	try:
-		print('goes here')
+		# print('goes here')
 		os.remove(filename)
 	except:
 		pass
@@ -103,7 +103,7 @@ def filedownload(path,name,infofile, passwd, option):
 		else:
 			os.rename(filename,path+"/"+name)
 	except:
-		print("shit")
+		# print("shit")
 		pass
 
 
@@ -136,7 +136,8 @@ def recur_download(path,id, passwd, option):
 			else:
 				iskifile = path+"/"+name
 			if md5(iskifile) == info['md5sum']:
-				print("haan same hai")
+				# print("haan same hai")
+				pass
 			else:
 				print("change ho gaya")
 
@@ -154,12 +155,13 @@ def recur_download(path,id, passwd, option):
 					if q == 1:
 						filedownload(path,name,info['file'], passwd, option)
 					elif q == 2:
-						print("query is 2 kuchh nahi karna")
+						# print("query is 2 kuchh nahi karna")
+						pass
 					elif q == 3:
 						filedownload(path,name,info['file'], passwd, option)
 						stoc_for_all = True
 					else:
-						print("query is 2 kuchh nahi karna")
+						# print("query is 2 kuchh nahi karna")
 						ctos_for_all = True
 
 
@@ -196,7 +198,7 @@ def recur_download(path,id, passwd, option):
 			else:
 				folderpath = path + "/" + name
 			os.mkdir(folderpath)
-			print(folderpath)
+			# print(folderpath)
 			recur_download(folderpath,folderid, passwd, option)
 
 
@@ -217,7 +219,7 @@ def fileupload(path,name,parent_id, passwd, option):
 	file = enc_upload(path, name, passwd, option)
 	# print(name)
 	
-	print(str(file))
+	# print(str(file))
 
 	upfiles = {
 		# 'name' : name,
@@ -273,7 +275,7 @@ def init() :
 	global parent_id
 	global home_dir
 	global root_dir
-	print(root_dir)
+	# print(root_dir)
 	os.chdir(home_dir)
 	with open(pass_file, 'rb') as f :
 		data = pickle.load(f)
