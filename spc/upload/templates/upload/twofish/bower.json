@@ -1,0 +1,28 @@
+{
+  "name": "twofish",
+  "version": "0.1.1",
+  "description": "Javascript Twofish (ECB and CBC) implementation.",
+  "homepage": "https://github.com/wouldgo/twofish",
+  "keywords": [
+    "security",
+    "secrets",
+    "data",
+    "chiper"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wouldgo/twofish.git"
+  },
+  "license" : "MIT",
+  "dependencies" : {
+  },
+  "exportsOverride": {
+  },
+  "authors": [
+    {
+    "name": "Dario Andrei",
+    "email": "wouldgo84@gmail.com",
+    "url": "https://github.com/wouldgo"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+SPC 1.0.1
+NAME:
+
+	spc - basic command for Secure Personal Cloud -- Team Alpha Cube
+
+OPTIONS:
+
+	login or config edit --> command for login. Asks for username and password
+	logout --> logs user out
+	signup --> signup new user for SPC
+	pwd --> shows path of current directory in cloud
+	ls -> shows folders and files in current directory of cloud
+	cd --> change directory in cloud
+	-u or status --> shows status of cloud
+	observe --> Asks user to enter path of the root directory he wants to sync with cloud
+	-s or sync --> sync with cloud. Server and your directory will contain 
+				the exact same snapshot of all the files after running this command.
+	-h or help --> opens manual page 

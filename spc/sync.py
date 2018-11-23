@@ -10,6 +10,17 @@ import time
 pass_file = "pass.p"
 home_dir = os.getcwd()
 
+
+try:
+	file_name = "server_info.p"
+	file = open(file_name,'rb')
+	dicti = pickle.load(file)
+	server = dicti['server_url']
+	file.close()
+except:
+	print("first add a url of server")
+	exit()
+
 def take_pass() :
 	passwd = getpass.getpass("Enter the new password: ")
 	conf_passwd = getpass.getpass("Again enter the password")
@@ -43,16 +54,20 @@ def listdir_nohidden(path):
     for f in os.listdir(path):
         if not f.startswith('.'):
             yield f
+try:
+	file_name = "login_info.p"
+	file = open(file_name,'rb')
+	d = pickle.load(file)
+	user = d['Username']
+	passwd = d['Password']
+except:
+	print("First login")
+	exit()
 
-file_name = "login_info.p"
-file = open(file_name,'rb')
-d = pickle.load(file)
 
-user = d['Username']
-passwd = d['Password']
 
 client = requests.session()
-url="http://127.0.0.1:8000/api/v1/rest-auth/login/"
+url=server + "/api/v1/rest-auth/login/"
 
 login_data = {
 	'username': user,
@@ -68,14 +83,14 @@ with open("root_dir.p",'rb') as f:
 
 #download wala part ========================================================
 
-url = "http://127.0.0.1:8000/api/v1/get_time_info/"
+url = server + "/api/v1/get_time_info/"
 r = client.get(url)
 time_info = r.json()
 # print(time_info)
 
-if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.time() - float(time_info['time']) > 30):
+if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.time() - float(time_info['time']) > 3):
 
-	url = "http://127.0.0.1:8000/api/v1/update_time_info/"
+	url = server + "/api/v1/update_time_info/"
 	data = { 'sync_allowed' : '0' , 'timestamp' : str(time.time())}
 	r = client.post(url,data = data)
 
@@ -84,10 +99,11 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 	# client = requests.session()
 	currpath = ""
 
-	url="http://127.0.0.1:8000/api/v1/rootfinder/"
+	# url="http://127.0.0.1:8000/api/v1/rootfinder/"
 
-	r = client.options(url)
-	parent_id = r.json()["root"]
+	# r = client.options(url)
+	# parent_id = r.json()["root"]
+	parent_id = d['parent_id']
 
 	from en_de import AESde
 	from en_de import DES3de
@@ -95,7 +111,7 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 
 
 	def filedownload(path,name,infofile, passwd, option):
-		url = "http://127.0.0.1:8000/files/download/?name="+infofile
+		url = server + "/files/download/?name="+infofile
 		filename = wget.download(url,out=path)
 		if option == 'AES' :
 			key = hashlib.sha256(passwd.encode('utf-8')).digest()
@@ -105,25 +121,37 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 			DES3de(key[:16], filename)
 		if option == 'Twofish' :
 			TWOde(key, filename)
+		
+		# print('filename' + filename)
+		tempfilename = filename.split(".")[0:-1]
+		tempfilename = ".".join(tempfilename)
 		try:
-			# print('goes here')
 			os.remove(filename)
+			# print('goes here')
 		except:
+			# print("ahiya")
 			pass
+
+		# print("new listdir: ")
 		try:
-			if path == '':
-				os.rename(filename,name)
-			else:
-				os.rename(filename,path+"/"+name)
+			print(os.listdir(path))
 		except:
-			# print("shit")
-			pass
+			print(os.listdir())
+
+
+		
+		if path == '':
+			os.rename(tempfilename,name)
+		else:
+			os.rename(tempfilename,path+"/"+name)
+		# print("success")
+	
 
 
 
 
 	def recur_download(path,id, passwd, option):
-		url = "http://127.0.0.1:8000/api/v1/filedownload/"+str(id)+"/"
+		url = server + "/api/v1/filedownload/"+str(id)+"/"
 		# print()
 		global stoc_for_all
 		global ctos_for_all
@@ -152,15 +180,16 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 					# print("haan same hai")
 					pass
 				else:
-					print("change ho gaya")
+					# print("change ho gaya")
 
 					if stoc_for_all == True:
 						filedownload(path,name,info['file'], passwd, option)
 					elif ctos_for_all == True:
-						print("query is 2 kuchh nahi karna")
+						pass
+						# print("query is 2 kuchh nahi karna")
 					else:
 
-						q = int(input("files confict. You have 4 options: \
+						q = int(input("files "+ path + "/" + name + " confict. You have 4 options: \
 												1: Server to your system for this file\
 												2: Your system to server for this file\
 												3: Server to your system for all files\
@@ -182,7 +211,7 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 				filedownload(path,name,info['file'], passwd, option)
 
 
-		url = "http://127.0.0.1:8000/api/v1/folderlist/"+str(id)+"/"
+		url = server + "/api/v1/folderlist/"+str(id)+"/"
 		r = client.get(url)
 		# print(r)
 		infolist = r.json()["folderlist"]
@@ -229,6 +258,7 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 		'name' : name,
 		'md5sum' : md5(loc),
 		}
+		iv = '186DE986FC69F8E47ED692B24D940'
 		file = enc_upload(path, name, passwd, option)
 		# print(name)
 		
@@ -240,14 +270,14 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 		}
 		
 		# print(file_data['name'])
-		url = "http://127.0.0.1:8000/api/v1/uploadfile/"+str(parent_id)+"/"
+		url = server + "/api/v1/uploadfile/"+str(parent_id)+"/"
 		r = client.post(url,data = file_data, files=upfiles,timeout = 1000000)
 		os.remove(loc+'.enc')
 		return r.json()['status']
 
 
 	def createfolder(name,parent_id):
-		url = "http://127.0.0.1:8000/api/v1/createfolder/"+str(parent_id)+"/"
+		url = server + "/api/v1/createfolder/"+str(parent_id)+"/"
 
 		folder_data = {
 			'name' : name,
@@ -257,31 +287,67 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 		# print(parent_id)
 		return r.json()["key"]
 
+	def folderlist(parent_id):
+		url = server + "/api/v1/folderlist/"+str(parent_id)+"/"
+		r = client.get(url)
+		infolist = r.json()["folderlist"]
+		ans = []
+		for f in infolist:
+			ans.append(f['name'])
+		return ans
+
+	def filelist(parent_id):
+		url = server + "/api/v1/filedownload/"+str(parent_id)+"/"
+		r = client.get(url)
+		infolist = r.json()['info']
+		ans = []
+		for f in infolist:
+			ans.append({ f['name'] : f['md5sum']})
+		return ans
+
 
 
 
 	def recur_upload(path,parent_id, passwd, option):
+		filekalist = filelist(parent_id)
+		folderkalist = folderlist(parent_id)
+		# print(filekalist)
+		# print(folderkalist)
 		for f in listdir_nohidden(path):
 			if os.path.isfile(path+"/"+f) == True:
 				# print("goes here")
-				status = fileupload(path,f,parent_id, passwd, option)
-				if(status == "yes"):
-					print("uploading "+path+"/"+f+"......")
+
+				temp_dict = {f : str(md5(path+"/"+f))}
+				if temp_dict in filekalist:
+					# print("same hai don't upload")
+					pass
+				else:
+					status = fileupload(path,f,parent_id, passwd, option)
+					if(status == "yes"):
+						print("uploading "+path+"/"+f+"......")
 			elif os.path.isdir(path+"/"+f) == True:
 				# print("goes here also")
 				key = createfolder(f,parent_id)
 				path2 = path + "/" + f
 				recur_upload(path2,key, passwd, option)
 
-	url="http://127.0.0.1:8000/api/v1/rootfinder/"
+	def recur_upload_withoutcheck(path,parent_id, passwd, option):
+		print("goes here")
+		for f in listdir_nohidden(path):
+			if os.path.isfile(path+"/"+f) == True:
+				status = fileupload(path,f,parent_id, passwd, option)
+				print("updating encryption of "+path+"/"+f+"......")
+			elif os.path.isdir(path+"/"+f) == True:
+				# print("goes here also")
+				key = createfolder(f,parent_id)
+				path2 = path + "/" + f
+				recur_upload_withoutcheck(path2,key, passwd, option)
 
-	r = client.options(url)
-	parent_id = r.json()["root"]
 
+	# url="http://127.0.0.1:8000/api/v1/rootfinder/"
+	# r = client.options(url)
+	parent_id = d['parent_id']
 
-	# name = path.split("/")[-1]
-
-	# new_parent_id = createfolder(name,parent_id) #extract name from path
 	import shutil
 
 	def init() :
@@ -321,7 +387,7 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 					new_passwd = data['md5']
 					new_option = data['option']
 				# os.chdir(root_dir)
-				recur_upload(root_dir,parent_id, new_passwd, new_option)
+				recur_upload_withoutcheck(root_dir,parent_id, new_passwd, new_option)
 
 	init()
 
@@ -338,11 +404,11 @@ if (int(time_info['allowed']) == 1) or (int(time_info['allowed']) == 0 and time.
 	print("sync done")
 
 	#sync done ====================================================
-	url = "http://127.0.0.1:8000/api/v1/update_time_info/"
+	url = server + "/api/v1/update_time_info/"
 
 	data = { 'sync_allowed' : '1' , 'timestamp' : str(time.time())}
 	r = client.post(url,data = data)
-	print(r)
+	# print(r)
 
 
 else:

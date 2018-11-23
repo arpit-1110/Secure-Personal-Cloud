@@ -10,7 +10,7 @@ def enc_upload(path, name, passwd, option) :
 		AESen(key[:32], loc)
 	elif option == "DES3" :
 		key = hashlib.sha256(passwd.encode('utf-8')).digest()
-		DES3en(key[:32], loc)
+		DES3en(key[:16], loc)
 	elif option == "Twofish" :
 		TWOen(passwd, loc)
 	else :

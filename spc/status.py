@@ -62,8 +62,9 @@ def listdir_nohidden(path):
 
 path = ""
 
-root_dir = "/Users/satvikmashkaria/Desktop/root-dir"
-
+with open("root_dir.p",'rb') as f :
+	# print(pickle.load(f))
+	root_dir = pickle.load(f)['root_dir']
 
 
 
@@ -183,13 +184,41 @@ for i in range(len(pathlist)):
 	if pathlist[i] not in serverpathlist:
 		extrafilesonclient.append(pathlist[i])
 
-print(extrafilesonserver)
-print(extrafilesonclient)
-print(intersectionchanged)
-print(intersectionunchanged)
+# print(extrafilesonserver)
+# print(extrafilesonclient)
+# print(intersectionchanged)
+# print(intersectionunchanged)
 
 
+if len(extrafilesonserver) != 0 :
+	print('Extra files on server are: ')
+	for i in extrafilesonserver :
+		print('\t' + str(i))
+else :
+	print('No extra files are present on server')
 
+if len(extrafilesonclient) != 0 :
+	print('Extra files on client are: ')
+	for i in extrafilesonclient :
+		print('\t' + str(i))
+else :
+	print('No extra files are present on client')
+
+if len(intersectionchanged) != 0 :
+	print('Files changed are: ')
+	for i in intersectionchanged :
+		print('\t' + str(i))
+else :
+	print('No changed files')
+
+if len(intersectionunchanged) != 0 :
+	print('Files Unchanged are: ')
+	for i in intersectionunchanged :
+		print('\t' + str(i))
+else :
+	print('No unchanges files')
+
+	# print()
 
 
 

@@ -92,37 +92,31 @@ def DES3en(key, in_filename, out_filename=None, chunk_size=24*1024) :
 	if not out_filename :
 		out_filename = in_filename + '.enc'
 	iv = Random.new().read(DES3.block_size)
-	encryptor = DES3.new(key, DES3.MODE_OFB, iv) 
+	encryptor = DES3.new(key, DES3.MODE_CBC, iv) 
 	filesize = os.path.getsize(in_filename)
 	with open(in_filename, 'rb') as infile:
-	        with open(out_filename, 'wb') as outfile:
-	            outfile.write(struct.pack('<Q', filesize))
-	            outfile.write(iv)
-	            while True :
-	            	chunk = infile.read(chunk_size)
-	            	if len(chunk) == 0 :
-	            		break 
-	            	elif len(chunk)%8 != 0 :
-	            		temp = ' '*(8 - len(chunk)%8)
-	            		chunk += temp.encode('utf-8')
-            		outfile.write(encryptor.encrypt(chunk))
+		with open(out_filename, 'wb') as outfile:
+	# outfile.write(struct.pack('<Q', filesize))
+			outfile.write(iv)
+			data = infile.read()
+			if len(data)%8 != 0 :
+				temp = ' '*(8-len(data)%8)
+				temp = temp.encode('utf-8')
+				data += temp 
+			outfile.write(encryptor.encrypt(data))
 
 
 def DES3de(key, in_filename, out_filename=None, chunk_size=24*1024) :
 	if not out_filename :
 		out_filename = in_filename[:-4]
 	with open(in_filename, 'rb') as infile:
-	    origsize = struct.unpack('<Q', infile.read(struct.calcsize('Q')))[0]
-	    iv = infile.read(8)
-	    decryptor = DES3.new(key, DES3.MODE_OFB, iv)
-	    with open(out_filename, 'wb') as outfile:
-	        while True:
-	            chunk = infile.read(chunk_size)
-	            if len(chunk) == 0:
-	                break
-	            outfile.write(decryptor.decrypt(chunk))
+		# origsize = struct.unpack('<Q', infile.read(struct.calcsize('Q')))[0]
+		iv = infile.read(8)
+		decryptor = DES3.new(key, DES3.MODE_CBC, iv)
+		with open(out_filename, 'wb') as outfile:
+			data = infile.read()
+			outfile.write(decryptor.decrypt(data))
 
-	        outfile.truncate(origsize)
 
 
 # key = 'pass'
