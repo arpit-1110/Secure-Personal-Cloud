@@ -53,13 +53,13 @@ def uploadfile(request,parent_id):
 	if form.is_valid():
 	    temp = form.save(commit = False)
 	    temp.author = request.user
-	    temp.name = str(temp.file)
+	    # temp.name = str(temp.file)
 	    temp.parentfolder = parent
 	    # temp.save()
 	    key = temp.pk
-	    print("goes here")
+	    # print("goes here")
 	    lst = File.objects.filter(name = temp.name, parentfolder = parent, author = request.user)
-	    print(lst)
+	    # print(lst)
 	    if len(lst) != 0:
 	    	key = lst[0].pk
 	    	lst[0].delete()
