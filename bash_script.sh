@@ -1,0 +1,1 @@
+function func(){ eval "$2=$(zenity --title="CONFLICT" --text "$*" --entry)"; }; ret=''; func "$1" ret; echo $ret;
