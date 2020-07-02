@@ -1,0 +1,176 @@
+<!-- templates/home.html-->
+
+
+<!-- {% block title %}Home{% endblock %} -->
+
+
+{% if user.is_authenticated %}
+<html>
+{% load staticfiles %}
+<meta charset="UTF-8">
+    <title>Secure Personal Cloud -- Alpha Cube</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amatic+SC">
+<style>
+body, html {height: 100%}
+body,h1,h2,h3,h4,h5,h6 {font-family: "Amatic SC", sans-serif}
+.menu {display: none}
+.bgimg {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("{% static '/images/cloud.jpg' %}");
+    min-height: 90%;
+}
+</style>
+
+
+<body>
+
+
+  
+<!-- Header with image -->
+<header class="bgimg w3-display-container w3-grayscale-min" id="home">
+  <div class="w3-display-bottomleft w3-padding">
+    <p><a href="accounts/logout" class="w3-button w3-xlarge w3-black">Logout</a></p>
+  </div>
+  <div class="w3-display-middle w3-center">
+    <span class="w3-text-white w3-hide-small" style="font-size:100px">Welcome<br>{{ user.username }}</span>
+    <span class="w3-text-white w3-hide-large w3-hide-medium" style="font-size:60px"><b>Welcome<br>{{ user.username }}</b></span>
+    <p><a href="upload/newfolder/" class="w3-button w3-xxlarge w3-black">Proceed to cloud</a></p>
+  </div>
+</header>
+
+<!--   
+  <body style="background-color:cyan;">
+  <nav class="navbar navbar-inverse">
+    <div class="containor-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class ="navbar-brand" href=http://127.0.0.1:8000>Home</a>
+        </div>
+
+     <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+
+               
+                <li ><a href= http://127.0.0.1:8000/accounts/logout>Logout</a></li>
+
+               
+                
+
+            </ul>
+        </div>
+    </div>
+   </nav>  
+   Hi {{ user.username }}!   
+  
+  
+ 
+  <p style="font-family: courier;"><a href="upload/newfolder/">Upload and View</a></p>
+  <p style="font-family: courier;"><a href="upload/search/">Search Files</a></p>
+ <p><a href='' -->
+
+  </body>
+{% else %}
+<!DOCTYPE html>
+<html>
+<title>Secure Personal Cloud -- Alpha Cube</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+<style>
+body,h1 {font-family: "Raleway", Arial, sans-serif}
+h1 {letter-spacing: 6px}
+.w3-row-padding img {margin-bottom: 12px}
+</style>
+<body>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-content" style="max-width:1500px">
+
+<!-- Header -->
+<header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
+  <h1 class="w3-xlarge">Alpha Cube</h1>
+  <h1>Secure Personal Cloud</h1>
+  
+  <div class="w3-padding-32">
+    <div class="w3-bar w3-border">
+      <a href="accounts/login" class="w3-bar-item w3-button">Login</a>
+      <a href="accounts/signup" class="w3-bar-item w3-button w3-light-grey">Signup</a>
+     
+    </div>
+  </div>
+</header>
+
+<div class="w3-row-padding w3-center w3-margin-top">
+<div class="w3-third">
+  <div class="w3-card w3-container" style="min-height:460px">
+  <h3>Easy to Access</h3><br>
+  <i class="fa fa-desktop w3-margin-bottom w3-text-theme" style="font-size:120px"></i>
+  <p>Complete Folder Structure</p>
+  <p>View Or Download in a click</p>
+  <p>Delete Files or Folders</p>
+  </div>
+</div>
+
+<div class="w3-third">
+  <div class="w3-card w3-container" style="min-height:460px">
+  <h3>Secure</h3><br>
+  <i class="fa fa-css3 w3-margin-bottom w3-text-theme" style="font-size:120px"></i>
+  <p>Encrypted</p>
+  <p>Immune from Server Attack</p>
+  <p>You've got the key</p>
+
+  </div>
+</div>
+
+<div class="w3-third">
+  <div class="w3-card w3-container" style="min-height:460px">
+  <h3>Syncronized</h3><br>
+  <i class="fa fa-diamond w3-margin-bottom w3-text-theme" style="font-size:120px"></i>
+  <p>Keep in Sync</p>
+  <p>Select what to keep</p>
+  <p>Equal across devices</p>
+  </div>
+</div>
+</div>
+
+
+<!-- <body style="background-color:cyan">
+  <nav class="navbar navbar-inverse">
+    <div class="containor-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class ="navbar-brand" href=http://127.0.0.1:8000>SPC</a>
+        </div>
+
+     <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+               
+                <li ><a href= http://127.0.0.1:8000/accounts/login>Login</a></li>
+
+                <li ><a href= http://127.0.0.1:8000/accounts/signup>Signup</a></li>
+                
+
+            </ul>
+        </div>
+</div>
+</nav>
+  <p style="font-family: courier;">You are not logged in</p>
+</div>
+</body> -->
+{% endif %}

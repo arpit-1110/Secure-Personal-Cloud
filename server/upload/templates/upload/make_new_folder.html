@@ -1,0 +1,253 @@
+
+
+{% if user.is_authenticated %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load staticfiles %}
+  
+    <meta charset="UTF-8">
+    <title>{% block title%}Secure Personal Cloud -- Alpha Cube{% endblock%}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+  <script src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/crypto-js/2.3.0-crypto-sha256.js" type="text/javascript"></script>
+  <script src="Scripts/aes.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+  <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pad-nopadding-min.js"></script>
+<script src="https://greasyfork.org/scripts/6696-cryptojs-lib-bytearray/code/CryptoJSlibByteArray.js"></script>
+<script src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
+  <style type="text/css">
+
+.image-div{
+  border: 1px white;
+  margin-left: 8%;
+  padding-left: 5%;
+  float: left;    
+}
+
+
+  
+</style> 
+</head>
+ 
+  <script type="text/javascript">
+    function de(urlToSend, name, option) {
+    // var aesjs = require('aes-js');
+     var req = new XMLHttpRequest();
+     req.open("GET", urlToSend, true);
+     req.responseType = "arraybuffer";
+     var filetxt = "Loading file ...." ;
+     var finaltext ;
+     req.onload = function (event) {
+         filetxt = new Uint8Array(req.response) ;
+         // var ciphertxt = filetxt.join("") ;
+         // alert(ciphertxt) ;
+         var IV = filetxt.slice(0, 16) ;
+         var passwd = prompt("Enter the key to download the file") ;
+         var hash = sha256.create() ;
+         // alert(hash) ;
+         var x = hash.update(passwd) ;
+         var final = hash.hex(x) ;
+         var key = final ;
+         // alert(key) ;
+         key = aesjs.utils.hex.toBytes(key);
+         // key = aesjs.utils.utf8.fromBytes(key) ;
+         // alert(key) ; 
+         key = key.slice(0, 32) ;
+         var aesCbc = new aesjs.ModeOfOperation.cbc(key, IV);
+         var encryptedHex = aesjs.utils.hex.fromBytes(filetxt.slice(16));
+         var encryptedBytes = aesjs.utils.hex.toBytes(encryptedHex);
+         finaltext = aesCbc.decrypt(filetxt.slice(16));
+         // alert(aesjs.utils.hex.fromBytes(finaltext)) ;
+         // alert(finaltext) ;
+         if (option == 1) {
+          saveByteArray(name, finaltext) ;
+        }
+        else
+        {
+          viewByteArray(name, finaltext) ;
+        }
+     };
+
+     req.send();
+     
+
+ }
+
+ function viewByteArray(name, byte) {
+  var blob = new Blob([byte], {type: name.slice(-3)});
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    // link.download = fileName;
+    window.open(link,'_blank');
+ }
+
+ function saveByteArray(reportName, byte) {
+    var blob = new Blob([byte], {type: "application/jpg"});
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    var fileName = reportName;
+    link.download = fileName;
+    link.click();
+}
+  </script>
+
+<body style="background-color: #FFFAFA;">
+  
+
+<nav class="navbar navbar-inverse">
+    <div class="containor-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class ="navbar-brand" href="/">Home</a>
+        </div>
+
+            <ul class="nav navbar-nav navbar-right">
+
+               <li ><a href= '/upload/newfolder/{{ key }}/'>Back</a></li>
+                <li ><a href= '/accounts/logout'>Logout</a></li>
+                <li><a></a></li>
+                
+               
+                
+
+            </ul>
+    
+
+
+  
+ 
+        </div>
+    </div>
+   </nav>  
+
+
+
+	
+	
+
+  
+
+
+
+
+
+    <section>
+
+
+{% for obj in childfolders %}
+
+     <div class="image-div">   
+
+    <a href="/upload/newfolder/{{obj.pk}}/">
+      <figure>
+        <img src="{% static '/images/folder.png' %}"  width=50px height=50px>
+        <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
+        </figcaption>
+        
+        
+        <a href="/upload/folderdelete/{{obj.pk}}/"><figure>
+        <img src="{% static '/images/delete.png' %}"  width=20px height=20px></figure></a></div>
+      
+      </figure>
+    </a>
+
+</div>
+
+{% endfor %}
+      
+        {% for obj in childfiles %}
+
+        <div class="image-div">
+
+    <a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}', 2)">
+      <figure>
+        <img src="{% static '/images/file.png' %}"  width=50px height=50px>
+        <figcaption style="color: black; font-size: 15px; text-align: justify; margin-top: 10px;">{{ obj.name }}
+        </figcaption>
+        <div>
+        <a onclick="de('{% url "db_file_storage.download_file" %}?name={{ obj.file }}', '{{obj.name}}', 1)" href="#">
+          <figure>
+
+        <img src="{% static '/images/download.png' %}"  width=20px height=20px></figure></a>
+        <a href="/upload/filedelete/{{obj.pk}}/"><figure>
+        <img src="{% static '/images/delete.png' %}"  width=20px height=20px></figure></a></div>
+      
+      </figure>
+    </a>
+  </div>
+    {% endfor %}
+
+
+
+
+
+          
+            <!-- <img src="{% url 'db_file_storage.get_file' %}?name={{ obj.name }}"> -->
+            <!-- '/upload/fileview/{{obj.pk}}/'
+            '/upload/filedownload/{{obj.pk}}/'
+            '/upload/folderdelete/{{obj.pk}}/'
+            '/upload/filedelete/{{obj.pk}}/'
+ -->
+           <!--  <a class="list-group-item list-group-item-info" href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'>
+        <i>{{obj.name}}</i></a>
+
+        <a class="list-group-item list-group-item-info" href='{% url "db_file_storage.download_file" %}?name={{ obj.file }}'> -->
+
+
+      
+          
+    
+
+      </section>
+
+      
+
+  
+  <div class="col-sm-offset-2 col-sm-8">
+      <div class="col-sm-offset-2 col-sm-8">
+  <!-- <p>Create New Folder:</p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ folderform.as_p }}
+    <button type="submit" name = "foldersubmitbutton">Create Folder</button>
+  </form> -->
+</div>
+
+	  	
+
+	
+	<div class="col-sm-offset-2 col-sm-8">
+	 
+
+
+  <!-- <p>Upload file:</p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ fileform.as_p }}
+    <button type="submit" name = "filesubmitbutton">Upload File</button>
+  </form> -->
+</div>
+</body>
+
+
+{% else %}
+	<p>You are not logged in</p>
+  	<a href="{% url 'login' %}">login</a>
+{% endif %}
+
